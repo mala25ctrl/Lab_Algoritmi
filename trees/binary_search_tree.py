@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from trees.base_tree import TreeInterface
-from trees.bst_node import BSTNode
+from trees.nodes.bst_node import BSTNode
 
 
 class BinarySearchTree(TreeInterface):

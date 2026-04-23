@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from trees.base_node import BaseNode
+from trees.nodes.base_node import BaseNode
 
 
 class TreeInterface(ABC):
