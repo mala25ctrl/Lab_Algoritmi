@@ -1,12 +1,13 @@
 from trees.binary_search_tree import BinarySearchTree
-from trees.bst_node import BSTNode
 
 if __name__ == '__main__':
     tree = BinarySearchTree()
 
-    tree.insert(BSTNode(4))
-    tree.insert(BSTNode(5))
-    tree.insert(BSTNode(6))
+    tree.insert(4)
+    tree.insert(5)
+    tree.insert(6)
+
+    print("Altezza dell'albero: " + str(tree.get_height()))
 
     tree.inorder_walk()
 
@@ -26,3 +27,4 @@ if __name__ == '__main__':
     if nodeToDelete is not None:
         tree.delete(nodeToDelete)
         tree.inorder_walk()
+
