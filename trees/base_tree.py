@@ -25,16 +25,28 @@ class TreeInterface(ABC):
                 x = x.right
         return x
 
-    @abstractmethod
-    def insert(self, key: int) -> None:
+    def _bst_insert(self, z: BaseNode) -> None:
         """
-        Inserisce una chiave nell'albero
+        Inserisce un nodo nell'albero binario di ricerca
         Args:
-            key: la chiave da inserire
+            z: il nodo da inserire
         Returns: None
-
         """
-        pass
+        y = None
+        x = self.root
+        while x is not None:
+            y = x
+            if z.key < x.key:
+                x = x.left
+            else:
+                x = x.right
+        z.p = y
+        if y is None:
+            self.root = z
+        elif z.key < y.key:
+            y.left = z
+        else:
+            y.right = z
 
     @abstractmethod
     def get_height(self) -> int:
