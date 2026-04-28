@@ -7,18 +7,18 @@ from trees.nodes.bst_node import BSTNode
 class BinarySearchTree(TreeInterface):
 
     def get_height(self) -> int:
-        return self._get_height_recursive(self.root)
-
-    def _get_height_recursive(self, x: BSTNode | None) -> int:
-        """
-        Metodo ricorsivo privato per il calcolo dell'altezza dell'albero
-        Args:
-            x: Nodo da cui iniziare il calcolo dell'altezza
-        Returns: Altezza dell'albero
-        """
-        if x is None:
+        if self.root is None:
             return -1
-        return 1 + max(self._get_height_recursive(x.left), self._get_height_recursive(x.right))
+        stack = [(self.root, 0)]
+        max_height = 0
+        while stack:
+            node, depth = stack.pop()
+            max_height = max(max_height, depth)
+            if node.left is not None:
+                stack.append((node.left, depth + 1))
+            if node.right is not None:
+                stack.append((node.right, depth + 1))
+        return max_height
 
     def insert(self, key: int) -> None:
         """

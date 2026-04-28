@@ -14,24 +14,18 @@ class RedBlackTree(TreeInterface):
         self.root = self.NIL
 
     def get_height(self) -> int:
-        """
-        Restituisce l'altezza dell'albero rosso-nero
-        Returns: altezza dell'albero
-        """
-        return self._get_height_recursive(self.root)
-
-    def _get_height_recursive(self, x: RBTNode) -> int:
-        """
-        Metodo ricorsivo privato per il calcolo dell'altezza dell'albero
-        Args:
-            x: nodo da cui iniziare il calcolo dell'altezza
-        Returns: altezza del sottoalbero radicato in x, o -1 se x è NIL
-
-        """
-        if x == self.NIL:
+        if self.root == self.NIL:
             return -1
-        return 1 + max(self._get_height_recursive(x.left),
-                       self._get_height_recursive(x.right))
+        stack = [(self.root, 0)]
+        max_height = 0
+        while stack:
+            node, depth = stack.pop()
+            max_height = max(max_height, depth)
+            if node.left != self.NIL:
+                stack.append((node.left, depth + 1))
+            if node.right != self.NIL:
+                stack.append((node.right, depth + 1))
+        return max_height
 
     def insert(self, key: int) -> None:
         """
@@ -254,14 +248,14 @@ if __name__ == '__main__':
 
     tree.inorder_walk()
 
-    x = tree.search(4)
-    if x is not None:
-        print("Nodo trovato:", x.key)
+    node = tree.search(4)
+    if node is not None:
+        print("Nodo trovato:", node.key)
 
-    x = tree.maximum()
-    if x is not None:
-        print("Nodo con chiave massima:", x.key)
+    node = tree.maximum()
+    if node is not None:
+        print("Nodo con chiave massima:", node.key)
 
-    x = tree.minimum()
-    if x is not None:
-        print("Nodo con chiave minima:", x.key)
+    node = tree.minimum()
+    if node is not None:
+        print("Nodo con chiave minima:", node.key)
