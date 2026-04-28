@@ -136,6 +136,7 @@ def run_experiments(sizes: list[int]) -> dict:
 
 
 if __name__ == '__main__':
+    np.random.seed(42)
     sizes = [100, 500, 1000, 2000, 5000, 10000]
     results = run_experiments(sizes)
     generate_all_plots(results)
