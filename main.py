@@ -143,6 +143,6 @@ def run_experiments(sizes: list[int]) -> dict:
 
 
 if __name__ == '__main__':
-    sizes = [100, 500]
+    sizes = [1, 10, 50, 100, 200, 300, 400, 500, 750, 1000]
     results = run_experiments(sizes)
     generate_all_plots(results)
