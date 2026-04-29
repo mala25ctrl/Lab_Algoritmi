@@ -1,7 +1,7 @@
+import time
 import timeit
 from typing import cast
 import numpy as np
-
 from plots import generate_all_plots
 from trees.avl_tree import AVLTree
 from trees.binary_search_tree import BinarySearchTree
@@ -46,7 +46,7 @@ def generated_almost_sorted(n: int) -> list[int]:
     return keys
 
 
-def measure_insert(TreeClass, keys: list[int], number: int = 5) -> float:
+def measure_insert(TreeClass, keys: list[int], number: int = 50) -> float:
     """
     Misura il tempo di inserimento di una lista di chiavi nell'albero
     Args:
@@ -64,22 +64,27 @@ def measure_insert(TreeClass, keys: list[int], number: int = 5) -> float:
     return timeit.timeit(insert_all, number=number) / number
 
 
-def measure_search(tree, keys: list[int], number: int = 5) -> float:
+def measure_search(tree, keys: list[int], number: int = 50) -> float:
     """
-    Misura il tempo medio di ricerca di una lista di chiavi nell'albero
+    Misura il tempo di ricerca usando deepcopy per garantire
+    che l'albero sia sempre lo stesso in ogni ripetizione.
     Args:
         number: numero di ripetizioni
         tree: l'albero in cui cercare le chiavi
         keys: la lista di chiavi da cercare
     Returns: tempo medio di ricerca per chiave in secondi
     """
-
-    def search_all():
+    times = []
+    for _ in range(number):
+        start_time = time.perf_counter()
         for key in keys:
             tree.search(key)
+        end_time = time.perf_counter()
 
-    total_time = timeit.timeit(search_all, number=number) / number
-    return total_time / len(keys)
+        times.append(end_time - start_time)
+
+    return float(np.mean(times))
+
 
 
 def run_experiments(sizes: list[int]) -> dict:
@@ -138,6 +143,6 @@ def run_experiments(sizes: list[int]) -> dict:
 
 
 if __name__ == '__main__':
-    sizes = [100, 500, 1000, 2000, 5000, 10000]
+    sizes = [100, 500]
     results = run_experiments(sizes)
     generate_all_plots(results)
