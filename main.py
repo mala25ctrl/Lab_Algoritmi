@@ -15,6 +15,7 @@ def generate_random(n: int) -> list[int]:
         n: il numero di interi da generare
     Returns: una lista di n numeri interi casuali univoci
     """
+    np.random.seed(n)
     numbers = np.random.randint(0, n * 10, size=n)
     return cast(np.ndarray, numbers).tolist()
 
@@ -36,6 +37,7 @@ def generated_almost_sorted(n: int) -> list[int]:
         n: numero di chiavi da generare
     Returns: lista di n interi quasi ordinati
     """
+    np.random.seed(n)
     keys = list(range(n))
     num_swap = max(1, n // 20)  # Scambia almeno 1 coppia o il 5% delle coppie
     for _ in range(num_swap):
@@ -136,7 +138,6 @@ def run_experiments(sizes: list[int]) -> dict:
 
 
 if __name__ == '__main__':
-    np.random.seed(42)
     sizes = [100, 500, 1000, 2000, 5000, 10000]
     results = run_experiments(sizes)
     generate_all_plots(results)
