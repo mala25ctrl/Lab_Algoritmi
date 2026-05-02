@@ -21,26 +21,60 @@ def setup_output_dir() -> None:
         os.makedirs(OUTPUT_DIR)
 
 
+def plot_metric(results: dict, metric: str, title: str, ylabel: str, filename: str) -> None:
+    """
+    Genera e salva un grafico per una specifica metrica al variare di n,
+    per ogni scenario di input e struttura dati.
+
+    Args:
+        results: dizionario con i risultati degli esperimenti.
+        metric: chiave della metrica da visualizzare
+            ("heights", "insert_times" oppure "search_times").
+        title: titolo del grafico.
+        ylabel: etichetta dell'asse y.
+        filename: nome del file di output.
+    """
+    fig, axes = plt.subplots(1, len(SCENARIOS), figsize=(5 * len(SCENARIOS), 5))
+    fig.suptitle(title)
+
+    if len(SCENARIOS) == 1:
+        axes = [axes]
+
+    for ax, scenario in zip(axes, SCENARIOS):
+        for tree_name in TREES:
+            values = results[scenario][tree_name][metric]
+            ax.plot(
+                SIZES,
+                values,
+                label=tree_name,
+                color=COLORS[tree_name],
+                marker="o"
+            )
+
+        ax.set_title(f"Input: {SCENARIO_LABELS[scenario]}")
+        ax.set_xlabel("n")
+        ax.set_ylabel(ylabel)
+        ax.legend()
+        ax.grid(True)
+
+    plt.tight_layout(rect=[0, 0, 1, 0.95])
+    plt.savefig(os.path.join(OUTPUT_DIR, filename), dpi=300)
+    plt.close()
+
+
 def plot_heights(results: dict) -> None:
     """
     Genera il grafico dell'altezza al variare di n per ogni scenario
     Args:
         results: dizionario con i risultati degli esperimenti
     """
-    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-    fig.suptitle("Altezza dell'albero al variare di n")
-    for ax, scenario in zip(axes, SCENARIOS):
-        for tree_name in TREES:
-            heights = results[scenario][tree_name]["heights"]
-            ax.plot(SIZES, heights, label=tree_name, color=COLORS[tree_name], marker="o")
-        ax.set_title(f"Input: {SCENARIO_LABELS[scenario]}")
-        ax.set_xlabel("n")
-        ax.set_ylabel("Altezza")
-        ax.legend()
-        ax.grid(True)
-    plt.tight_layout()
-    plt.savefig(os.path.join(OUTPUT_DIR, "heights.png"))
-    plt.close()
+    plot_metric(
+        results,
+        metric="heights",
+        title="Altezza dell'albero al variare di n",
+        ylabel="Altezza",
+        filename="heights.png"
+    )
 
 
 def plot_insert_times(results: dict) -> None:
@@ -50,20 +84,13 @@ def plot_insert_times(results: dict) -> None:
     Args:
         results: dizionario con i risultati degli esperimenti
     """
-    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-    fig.suptitle("Tempo di inserimento al variare di n")
-    for ax, scenario in zip(axes, SCENARIOS):
-        for tree_name in TREES:
-            times = results[scenario][tree_name]["insert_times"]
-            ax.plot(SIZES, times, label=tree_name, color=COLORS[tree_name], marker="o")
-        ax.set_title(f"Input: {SCENARIO_LABELS[scenario]}")
-        ax.set_xlabel("n")
-        ax.set_ylabel("Tempo (s)")
-        ax.legend()
-        ax.grid(True)
-    plt.tight_layout()
-    plt.savefig(os.path.join(OUTPUT_DIR, "insert_times.png"))
-    plt.close()
+    plot_metric(
+        results,
+        metric="insert_times",
+        title="Tempo di inserimento al variare di n",
+        ylabel="Tempo (s)",
+        filename="insert_times.png"
+    )
 
 
 def plot_search_times(results: dict) -> None:
@@ -73,20 +100,13 @@ def plot_search_times(results: dict) -> None:
     Args:
         results: dizionario con i risultati degli esperimenti
     """
-    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-    fig.suptitle("Tempo di ricerca al variare di n")
-    for ax, scenario in zip(axes, SCENARIOS):
-        for tree_name in TREES:
-            times = results[scenario][tree_name]["search_times"]
-            ax.plot(SIZES, times, label=tree_name, color=COLORS[tree_name], marker="o")
-        ax.set_title(f"Input: {SCENARIO_LABELS[scenario]}")
-        ax.set_xlabel("n")
-        ax.set_ylabel("Tempo medio per chiave (s)")
-        ax.legend()
-        ax.grid(True)
-    plt.tight_layout()
-    plt.savefig(os.path.join(OUTPUT_DIR, "search_times.png"))
-    plt.close()
+    plot_metric(
+        results,
+        metric="search_times",
+        title="Tempo di ricerca al variare di n",
+        ylabel="Tempo medio per chiave (s)",
+        filename="search_times.png"
+    )
 
 
 def plot_table(results: dict, metric: str, title: str, filename: str, fmt: str = "{:.4f}") -> None:
