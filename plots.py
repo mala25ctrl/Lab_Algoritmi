@@ -14,12 +14,19 @@ OUTPUT_DIR = "output"
 
 
 def setup_output_dir() -> None:
+    """
+    Crea la cartella di output se non esiste
+    """
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
 
 
 def plot_heights(results: dict) -> None:
-    """Genera il grafico dell'altezza al variare di n per ogni scenario"""
+    """
+    Genera il grafico dell'altezza al variare di n per ogni scenario
+    Args:
+        results: dizionario con i risultati degli esperimenti
+    """
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
     fig.suptitle("Altezza dell'albero al variare di n")
     for ax, scenario in zip(axes, SCENARIOS):
@@ -37,7 +44,12 @@ def plot_heights(results: dict) -> None:
 
 
 def plot_insert_times(results: dict) -> None:
-    """Genera il grafico del tempo di inserimento al variare di n per ogni scenario"""
+    """
+    Genera e salva un grafico del tempo di inserimento al variare di n
+    per diversi scenari di input.
+    Args:
+        results: dizionario con i risultati degli esperimenti
+    """
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
     fig.suptitle("Tempo di inserimento al variare di n")
     for ax, scenario in zip(axes, SCENARIOS):
@@ -55,7 +67,12 @@ def plot_insert_times(results: dict) -> None:
 
 
 def plot_search_times(results: dict) -> None:
-    """Genera il grafico del tempo di ricerca al variare di n per ogni scenario"""
+    """
+    Genera e salva un grafico del tempo di ricerca al variare di n
+    per diversi scenari di input.
+    Args:
+        results: dizionario con i risultati degli esperimenti
+    """
     fig, axes = plt.subplots(1, 3, figsize=(15, 5))
     fig.suptitle("Tempo di ricerca al variare di n")
     for ax, scenario in zip(axes, SCENARIOS):
@@ -112,13 +129,31 @@ def plot_table(results: dict, metric: str, title: str, filename: str, fmt: str =
 
 
 def plot_tables(results: dict) -> None:
-    """Genera le tabelle per inserimento, ricerca e altezza"""
+    """
+    Genera e salva le tabelle per le principali metriche:
+    tempi di inserimento, tempi di ricerca e altezza degli alberi.
+
+    Args:
+        results: dizionario con i risultati degli esperimenti.
+    """
     plot_table(results, "insert_times", "Tempi di inserimento (s)", "tabella_inserimento.png")
     plot_table(results, "search_times", "Tempi di ricerca per chiave (s)", "tabella_ricerca.png", fmt="{:.2e}")
     plot_table(results, "heights", "Altezza dell'albero", "tabella_altezza.png", fmt="{:.0f}")
 
 
 def generate_all_plots(results: dict) -> None:
+    """
+        Genera e salva tutti i grafici e le tabelle a partire dai risultati
+        degli esperimenti.
+
+        Esegue:
+            - creazione della directory di output
+            - grafici: altezza, tempi di inserimento e ricerca
+            - tabelle: inserimento, ricerca e altezza
+
+        Args:
+            results: dizionario con i risultati degli esperimenti.
+        """
     setup_output_dir()
     plot_heights(results)
     plot_insert_times(results)
